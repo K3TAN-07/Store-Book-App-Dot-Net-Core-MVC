@@ -26,15 +26,40 @@ namespace MyApp.BookStore
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
+            app.Use(async(context, next) =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                await context.Response.WriteAsync("Its is first middleware");
+                
+                await next();
+
+                await context.Response.WriteAsync("Its is first middleware response");
+
             });
+
+            app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync("Its is second middleware");
+
+                await next();
+
+                await context.Response.WriteAsync("Its is second middleware response");
+
+            });
+
+            app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync("Its is third middleware");
+            });
+
+            //app.UseRouting();
+
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapGet("/", async context =>
+            //    {
+            //        await context.Response.WriteAsync("Hello World!");
+            //    });
+            //});
         }
     }
 }
