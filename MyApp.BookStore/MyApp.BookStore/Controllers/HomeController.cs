@@ -14,6 +14,11 @@ namespace MyApp.BookStore.Controllers
             return View();
         }
 
+        public ViewResult ContactUS()
+        {
+            return View();
+        }
+
         public ViewResult Error() 
         {
             return View();

@@ -1,0 +1,56 @@
+﻿@model BookModel
+
+<div class="container">
+    <h3 class="display-4">Add new book</h3>
+    <hr />
+    @if(ViewBag.IsSuccess == true){
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Book Added Successfully</strong> You can check <a asp-controller="Book" , asp-action="GetBook" , asp-route-id="@ViewBag.BookId">here</a> to view.
+        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+    </div>
+    }
+   
+
+    <form method="post" asp-action="AddNewBook" asp-controller="Book">
+        <div class="form-group">
+            <label asp-for="Title"></label> 
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Author"></label>
+            <input asp-for="Author" class="form-control" />
+            <span asp-validation-for="Author" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Language"></label>
+            <select asp-for="Language" class="form-control">
+                <option value="">Please choose book language</option>
+                <option>Hindi</option>
+                <option>Marathi</option>
+                <option selected>English</option>
+            </select>
+            <span asp-validation-for="Language" class="text-danger"></span>
+            
+        </div>
+
+
+        <div class="form-group">
+            <label asp-for="Description"></label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TotalPages"></label>
+            <input asp-for="TotalPages" class="form-control" />
+            <span asp-validation-for="TotalPages" class="text-danger"></span>
+
+        </div>
+        
+        <div class="form-group">
+            <input type="submit" value="Add book" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
