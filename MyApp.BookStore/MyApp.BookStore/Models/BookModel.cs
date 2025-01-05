@@ -1,4 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using MyApp.BookStore.Data;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace MyApp.BookStore.Models
 {
@@ -22,5 +26,25 @@ namespace MyApp.BookStore.Models
         [Display(Name ="Total pages of book")]
         public int? TotalPages { get; set; }
         public string Language { get; set; }
+
+        public string CoverImageUrl { get; set; }
+        
+        [Required]
+        [Display(Name ="Choose the cover photo of your book")]
+        public IFormFile CoverPhoto { get; set; }
+
+        [Required]
+        [Display(Name = "Choose the gallery photos of your book")]
+        public IFormFileCollection GalleryFiles { get; set; }
+
+        public List<GalleryModel> Gallery { get; set; }
+        public string BookPdfUrl { get; set; }
+
+        [Required]
+        [Display(Name = "Choose the PDF of your book")]
+        public IFormFile BookPdf { get; set; }
+
     }
+
 }
+

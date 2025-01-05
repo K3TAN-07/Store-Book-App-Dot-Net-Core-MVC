@@ -27,7 +27,21 @@ namespace MyApp.BookStore.Repository
                 TotalPages = bookModel.TotalPages.HasValue ? bookModel.TotalPages.Value : 0 ,
                 Title = bookModel.Title,
                 UpdatedOn = DateTime.UtcNow,
+                CoverImageUrl = bookModel.CoverImageUrl,
+                BookPdfUrl = bookModel.BookPdfUrl,
             };
+
+            newBook.bookGallery = new List<BookGallery>();
+
+            foreach(var file in bookModel.Gallery)
+            {
+                newBook.bookGallery.Add(new BookGallery()
+                {
+                    Name = file.Name,
+                    URL = file.URL,
+                });
+            }
+
            await _context.Books.AddAsync(newBook);
            await _context.SaveChangesAsync();
 
@@ -49,7 +63,8 @@ namespace MyApp.BookStore.Repository
                         Language = book.Language,
                         Title = book.Title,
                         TotalPages = book.TotalPages,
-                        Id = book.Id
+                        Id = book.Id,
+                        CoverImageUrl = book.CoverImageUrl
                     });
                 }
             }
@@ -58,27 +73,30 @@ namespace MyApp.BookStore.Repository
 
         public async Task<BookModel> GetBookById(int id)
         {
-            var book = await _context.Books.FindAsync(id);
-            if(book != null)
-            {
-                var bookDetails = new BookModel()
-                {
-                    Author = book.Author,
-                    Category = book.Category,
-                    Description = book.Description,
-                    Id = book.Id,
-                    Language = book.Language,
-                    Title = book.Title,
-                    TotalPages = book.TotalPages
-                };
-                return bookDetails;
-            }
-            return null;
+                return await _context.Books.Where(x => x.Id == id)
+                    .Select(book => new BookModel()
+                    {
+                        Author = book.Author,
+                        Category = book.Category,
+                        Description = book.Description,
+                        Id = book.Id,
+                        Language = book.Language,
+                        Title = book.Title,
+                        TotalPages = book.TotalPages,
+                        CoverImageUrl = book.CoverImageUrl,
+                        Gallery = book.bookGallery.Select(g => new GalleryModel()
+                        {
+                            Id = g.Id,
+                            Name = g.Name,
+                            URL = g.URL
+                        }).ToList(),
+                        BookPdfUrl = book.BookPdfUrl
+                    }).FirstOrDefaultAsync();
         }
 
         public List<BookModel> SearchBooks(string bookName, string AuthorName)
         {
-            return DataSource().Where(x => x.Title.Contains(bookName) || x.Author.Contains(AuthorName)).ToList();
+            return null;
         }
 
         public List<BookModel> DataSource()
