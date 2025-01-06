@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyApp.BookStore.Models;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace MyApp.BookStore.Controllers
 {
+    [Authorize]   
     public class BookController : Controller
     {
         private readonly BookRepository _bookRepository = null;

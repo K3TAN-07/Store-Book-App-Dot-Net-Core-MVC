@@ -5,7 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyApp.BookStore.Data;
+using MyApp.BookStore.Helpers;
+using MyApp.BookStore.Models;
 using MyApp.BookStore.Repository;
+using MyApp.BookStore.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +23,23 @@ namespace MyApp.BookStore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<BookStoreContext>(options => options.UseNpgsql("Host=localhost;Database=BookStore;Username=postgres;Password=root;"));
+
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<BookStoreContext>();
+
+            services.ConfigureApplicationCookie(config =>
+            {
+                config.LoginPath = "/login";
+            });
+
             services.AddControllersWithViews();
 #if DEBUG
             services.AddRazorPages().AddRazorRuntimeCompilation();
 #endif
 
             services.AddScoped<BookRepository, BookRepository>();
-
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<BookStoreContext>();
+            services.AddScoped<IAccoountRepository, AccoountRepository>();
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,9 +50,12 @@ namespace MyApp.BookStore
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
-            app.UseAuthorization();
             app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

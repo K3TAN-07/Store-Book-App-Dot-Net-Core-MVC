@@ -4,6 +4,12 @@ namespace MyApp.BookStore.Models
 {
     public class SignUpUserModel
     {
+        [Required(ErrorMessage = "Please enter first name")]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Please enter Last name")]
+        public string LastName { get; set; }
+
         [Required(ErrorMessage ="Please enter your email")]
         [Display(Name ="Email address")]
         [EmailAddress(ErrorMessage ="Please enter valid email")]
