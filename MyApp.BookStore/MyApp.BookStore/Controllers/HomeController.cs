@@ -21,16 +21,16 @@ namespace MyApp.BookStore.Controllers
         }
         public async Task<ViewResult> IndexAsync()
         {
-            UserEmailOptions options = new UserEmailOptions
-            {
-                ToEmails = new List<string>() { "test@gmail.com" },
-                 PlaceHolders = new List<KeyValuePair<string, string>>()
-                    {
-                        new KeyValuePair<string, string>("{{UserName}}", "Ketan")
-                    }
-            };
+            //UserEmailOptions options = new UserEmailOptions
+            //{
+            //    ToEmails = new List<string>() { "test@gmail.com" },
+            //     PlaceHolders = new List<KeyValuePair<string, string>>()
+            //        {
+            //            new KeyValuePair<string, string>("{{UserName}}", "Ketan")
+            //        }
+            //};
 
-            await _emailService.SendTestEmail(options);
+            //await _emailService.SendTestEmail(options);
 
             return View();
         }

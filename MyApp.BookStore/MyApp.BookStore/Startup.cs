@@ -32,7 +32,21 @@ namespace MyApp.BookStore
         {
             services.AddDbContext<BookStoreContext>(options => options.UseNpgsql("Host=localhost;Database=BookStore;Username=postgres;Password=root;"));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<BookStoreContext>();
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<BookStoreContext>().AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequiredLength = 5;
+                options.Password.RequiredUniqueChars = 1;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+
+                options.SignIn.RequireConfirmedEmail = true;
+
+               
+            });
 
             services.ConfigureApplicationCookie(config =>
             {
